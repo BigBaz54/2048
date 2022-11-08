@@ -7,13 +7,13 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 
 public class VuePlateau extends GridPane implements Observateur {
     private Jeu jeu ;
+    private int nbButt;
 
     public VuePlateau(Jeu jeu) {
         super();
@@ -34,11 +34,27 @@ public class VuePlateau extends GridPane implements Observateur {
                 this.add(temp, j, i);
             }
         }
+        nbButt = taille;
         jeu.nouveau();
     }
 
     public void reagir() {
         int taille = jeu.getTaille();
+        if (taille != nbButt) {
+            getChildren().clear();
+            for (int i=0; i<taille; i++) {
+                for (int j=0; j<taille; j++) {
+                    Button temp = new Button(jeu.getCase(i, j)+"");
+                    temp.setMinWidth(40);
+                    temp.setMinHeight(40);
+                    temp.setMaxWidth(40);
+                    temp.setMaxHeight(40);
+                    temp.setOnAction(new EcouteurCase(jeu, i, j));
+                    this.add(temp, j, i);
+                }
+            }
+            nbButt = taille;
+        }
         ArrayList<Integer> nextTransition = jeu.getNextTransition();
         if (!nextTransition.isEmpty()) {
             Button button = (Button) getChildren().get(nextTransition.get(0));
@@ -93,5 +109,5 @@ public class VuePlateau extends GridPane implements Observateur {
 
             }
         }
-    };
+    }
 }

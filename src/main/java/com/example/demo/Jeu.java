@@ -42,17 +42,17 @@ public class Jeu extends SujetObserve{
     }
 
     public void nouveau() {
+        resetTransition();
         nbJouees += 1;
         boolean won = false;
-        for (int i=0; i<taille; i++) {
-            for (int j=0; j<taille; j++) {
-                if (getCase(i,j)>=objectif) {
-                    won = true;
-                }
+        for (int e: cases) {
+            if (e>=objectif) {
+                won = true;
             }
         }
         if (won) {nbGagnees+=1;}
         Random random = new Random();
+        cases = new int[taille*taille];
         for (int i=0; i<taille*taille; i++) {
             cases[i] = (int) Math.pow(2, random.nextInt(1,4)) ;
         }
